@@ -4,11 +4,13 @@ let interval = null;
 module.exports.run = async (client, message, args) => {
 	const broadcast = client.voice.createBroadcast();
 	const channel = message.member.voice.channel;
+	if(channel.type !== 'stage') return message.channel.send('we only support stage channels.');
 	if(!channel) return message.channel.send(new MessageEmbed().setTitle('epic bruh moment').setDescription('join a channel bruh I aint playing if no one listenin').setThumbnail('https://media1.tenor.com/images/cf7a595d6825e86da341dd1f2e8b2c18/tenor.gif?itemid=6151149').setTimestamp().setColor('RANDOM'));
 	let stream = await ytdl(args[0]);
 	stream.on('error', console.error);
 	stream.on('end', () => {
 		message.channel.send(new MessageEmbed().setTitle('ended!').setDescription('the stream has ended.').setTimestamp().setColor('RANDOM').setThumbnail(message.author.avatarURL({ dynamic: true })));
+		message.guild.me.voice.channel.leave();
 	});
 	broadcast.play(stream);
 	message.channel.send(new MessageEmbed().setTitle('Playing!').setDescription('Playing the stream, please make the bot a speaker').setTimestamp().setColor('RANDOM').setThumbnail(message.author.avatarURL({ dynamic: true })));
@@ -24,6 +26,8 @@ module.exports.run = async (client, message, args) => {
 	}
 	try {
 		const connection = await message.member.voice.channel.join();
+		message.guild.me.voice.setSuppressed(false);
+
 		connection.play(broadcast);
 	}
 	catch (error) {
