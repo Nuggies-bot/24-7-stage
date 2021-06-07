@@ -11,7 +11,6 @@ module.exports.run = async (client, message, args) => {
 		console.log('it ended');
 	});
 	broadcast.play(stream);
-	client.api['stage-instance'].post({ channel_id: channel, topic: 'pp' }).then(e => console.log(e));
 	message.channel.send('playing!');
 	if (!interval) {
 		interval = setInterval(async function() {
@@ -46,10 +45,10 @@ module.exports.run = async (client, message, args) => {
 
 
 module.exports.config = {
-	name: 'test',
-	description: 'Test Command',
-	usage: '?test',
-	botPerms: [],
+	name: 'play',
+	description: 'play a stream',
+	usage: '!!play <link>',
+	botPerms: ['SPEAK', 'CONNECT', 'SEND_MESSAGES'],
 	userPerms: ['ADMINISTRATOR'],
-	aliases: ['test-command', 'gamer-test'],
+	aliases: ['playstream', 'streamplay'],
 };
