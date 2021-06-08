@@ -20,7 +20,7 @@ module.exports.run = async (client, message, args) => {
 			try {
 				stream = await ytdl(args[0], { highWaterMark: 69, quality: 'highestaudio', type: 'opus' });
 				stream.on('error', console.error);
-				broadcast.play(stream, { highWaterMark: 69, volume: false });
+				broadcast.play(stream, { highWaterMark: 69, volume: 0.5 });
 			}
 			catch (e) { return; }
 		}, 1800000);
