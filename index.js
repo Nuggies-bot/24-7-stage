@@ -5,7 +5,9 @@ const fs = require('fs');
 
 client.login(process.env.TOKEN);
 
-client.on('ready', () => console.log(`${client.user.tag} is online.`));
+client.on('ready', () => {
+	client.user.setActivity('to juice wrld', { type: 'LISTENING' });
+});
 
 client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
