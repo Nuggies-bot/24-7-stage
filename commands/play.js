@@ -2,6 +2,7 @@ const { MessageEmbed } = require('discord.js');
 const ytdl = require('ytdl-core');
 let interval = null;
 module.exports.run = async (client, message, args) => {
+	if(!message.member.roles.cache.has('851717791714115586')) return message.channel.send(new MessageEmbed().setTitle('Error').setDescription('You need the <@&851717791714115586> role to use this command.').setTimestamp().setColor('RANDOM'));
 	const broadcast = client.voice.createBroadcast();
 	const channel = message.member.voice.channel;
 	if(channel.type !== 'stage') return message.channel.send('we only support stage channels.');
