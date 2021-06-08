@@ -18,9 +18,9 @@ module.exports.run = async (client, message, args) => {
 	if (!interval) {
 		interval = setInterval(async function() {
 			try {
-				stream = await ytdl(args[0], { highWaterMark: 69, quality: 'highestaudio', volume: false });
+				stream = await ytdl(args[0], { highWaterMark: 69, quality: 'highestaudio', type: 'opus' });
 				stream.on('error', console.error);
-				broadcast.play(stream, {volume: });
+				broadcast.play(stream, { highWaterMark: 69, volume: false });
 			}
 			catch (e) { return; }
 		}, 1800000);
