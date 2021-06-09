@@ -13,14 +13,14 @@ client.on('ready', () => {
 	client.user.setActivity('to pop music', { type: 'LISTENING' });
 
 	// XP System
-// 	setInterval(async () => {
-// 		const channel = await client.channels.fetch('827108248150736916', true, true);
+	// setInterval(async () => {
+	// 	const channel = await client.channels.fetch('827108248150736916', true, true);
 
-// 		const members = channel.members.filter(x => !x.voice.selfDeaf && !x.user.bot);
+	// 	const members = channel.members.filter(x => !x.voice.selfDeaf && !x.user.bot);
 
-// 		members.map(x => xp.addXP(x.id, Math.floor(Math.random() * 2) + 1));
-// 	}, Math.floor(Math.random() * 10) + 8 * 1000);
-// });
+	// 	members.map(x => xp.addXP(x.id, Math.floor(Math.random() * 2) + 1));
+	// }, Math.floor(Math.random() * 10) + 8 * 1000);
+});
 
 client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
