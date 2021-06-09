@@ -1,7 +1,10 @@
 const { MessageEmbed } = require('discord.js');
 const ytdl = require('ytdl-core');
+const ytsr = require('ytsr');
 let interval = null;
 module.exports.run = async (client, message, args) => {
+
+
 	if(!message.member.roles.cache.has('851717791714115586')) return message.channel.send(new MessageEmbed().setTitle('Error').setDescription('You need the <@&851717791714115586> role to use this command.').setTimestamp().setColor('RANDOM'));
 	const broadcast = client.voice.createBroadcast();
 	const channel = message.member.voice.channel;
@@ -43,6 +46,7 @@ module.exports.run = async (client, message, args) => {
 			try {
 				const connection = await channel.join();
 				connection.play(broadcast);
+				message.guild.me.voice.setSuppressed(false);
 			}
 			catch (error) {
 				console.error(error);

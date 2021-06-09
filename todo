@@ -1,2 +1,5 @@
-- choose random video on end if autoplay is on
-- auto speak permissions upon joining stage channels
+- choose random video on end if autoplay is on // done
+- auto speak permissions upon joining stage channels // done
+- autoplay related videos
+- support playlists
+- ytsr
