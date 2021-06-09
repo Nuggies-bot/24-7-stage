@@ -25,10 +25,10 @@ module.exports.run = async (client, message, args) => {
 
 
 module.exports.config = {
-	name: 'eval-+',
+	name: 'eval',
 	description: 'play a stream',
 	usage: '!!play <link>',
 	botPerms: ['SPEAK', 'CONNECT', 'SEND_MESSAGES'],
 	userPerms: ['ADMINISTRATOR'],
-	aliases: ['playstream', 'streamplay'],
+	aliases: ['evaluate', 'penis'],
 };
