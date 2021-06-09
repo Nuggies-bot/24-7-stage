@@ -2,25 +2,25 @@ require('dotenv').config();
 const Discord = require('discord.js');
 const client = new Discord.Client({ intents: Discord.Intents.ALL });
 const fs = require('fs');
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 
 client.login(process.env.TOKEN);
-mongoose.connect(process.env.MONGODB, { useNewUrlParser: true, useUnifiedTopology: true });
+// mongoose.connect(process.env.MONGODB, { useNewUrlParser: true, useUnifiedTopology: true });
 
-const xp = require('./functions/lb');
+// const xp = require('./functions/lb');
 client.on('ready', () => {
 	console.log('Online!');
 	client.user.setActivity('to pop music', { type: 'LISTENING' });
 
 	// XP System
-	setInterval(async () => {
-		const channel = await client.channels.fetch('827108248150736916', true, true);
+// 	setInterval(async () => {
+// 		const channel = await client.channels.fetch('827108248150736916', true, true);
 
-		const members = channel.members.filter(x => !x.voice.selfDeaf && !x.user.bot);
+// 		const members = channel.members.filter(x => !x.voice.selfDeaf && !x.user.bot);
 
-		members.map(x => xp.addXP(x.id, Math.floor(Math.random() * 2) + 1));
-	}, Math.floor(Math.random() * 10) + 8 * 1000);
-});
+// 		members.map(x => xp.addXP(x.id, Math.floor(Math.random() * 2) + 1));
+// 	}, Math.floor(Math.random() * 10) + 8 * 1000);
+// });
 
 client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
