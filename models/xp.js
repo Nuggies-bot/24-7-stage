@@ -1,9 +1,8 @@
-const { Schema, model } = require('mongoose');
+const mongoose = require('mongoose');
 
-const schema = new Schema({
-	guildID: { type: String, required: true },
-	userID: { type: String, required: true },
-	xp: { type: Number, required: true },
+const Schema = new mongoose.Schema({
+	id: String,
+	points: Number,
 });
 
-module.exports = model('XP', schema);
+module.exports = mongoose.model('Afk', Schema);

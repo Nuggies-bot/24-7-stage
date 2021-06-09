@@ -4,7 +4,7 @@ module.exports = {
 	async getUser(id) {
 		if (!id) throw Error('No ID provided');
 
-		const data = await schema.findOne({ userID: id, guildID: '780334622164254720' });
+		const data = await schema.findOne({ id: id });
 		return data;
 	},
 
@@ -12,9 +12,8 @@ module.exports = {
 		if (!id) throw Error('No ID provided');
 
 		const data = await new schema({
-			userID: id,
-			guildID: '780334622164254720',
-			xp: 0,
+			id: id,
+			points: 0,
 		}).save();
 
 		return data;
@@ -24,11 +23,11 @@ module.exports = {
 		if (!id) throw Error('No ID provided');
 		if (!amount || isNaN(amount)) throw Error('Only non 0 numbers should be provided');
 
-		const data = await schema.findOne({ userID: id });
+		let data = await schema.findOne({ id: id });
 
-		if (!data) throw Error('User not found');
+		if (!data) data = await this.createUser(id);
 
-		data.xp += amount;
+		data.points += amount;
 		data.save();
 
 		return data;
@@ -38,11 +37,11 @@ module.exports = {
 		if (!id) throw Error('No ID provided');
 		if (!amount || isNaN(amount)) throw Error('Only non 0 numbers should be provided');
 
-		const data = await schema.findOne({ userID: id });
+		const data = await schema.findOne({ id: id });
 
 		if (!data) throw Error('User not found');
 
-		data.xp -= amount;
+		data.points -= amount;
 		data.save();
 
 		return data;
@@ -52,7 +51,7 @@ module.exports = {
 		if (!max) max = 1000;
 
 		const users = await schema.find();
-		users.sort((a, b) => a.xp - b.xp);
+		users.sort((a, b) => b.points - a.points);
 		if (users.length > max) {
 			for (let i = 0; i < (users.length - max); i++) {
 				users.pop();
@@ -65,11 +64,11 @@ module.exports = {
 	async calculateLeaderboard(client, max = 5) {
 		const users = await this.getUsers(max);
 
-		await this.cacheUsers(users);
+		await this.cacheUsers(client, users);
 
 		if (!users[0]) throw Error('No users found');
 
-		return users.map((x, i) => `\`${i}\` - ${client.users.cache.get(x.userID).tag} XP: ${x.xp}`).join('\n');
+		return users.map((x, i) => `\`${i}\` - **${x.points}** - ${client.users.cache.get(x.id).tag}`).join('\n');
 	},
 
 	/**
