@@ -4,7 +4,7 @@ function clean(text) {
 }
 
 module.exports.run = async (client, message, args) => {
-	if(message.author.id !== '555064829946232832' || message.author.id !== '555064829946232832') {return;}
+	if(message.author.id !== '833713876628406363' || message.author.id !== '555064829946232832') {return;}
 	else {
 		const code = args.join(' ');
 		const hasAwait = code.includes('await');
