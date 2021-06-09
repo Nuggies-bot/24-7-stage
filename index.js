@@ -6,7 +6,8 @@ const fs = require('fs');
 client.login(process.env.TOKEN);
 
 client.on('ready', () => {
-	client.user.setActivity('to juice wrld', { type: 'LISTENING' });
+	console.log('ready');
+	client.user.setActivity('to pop music', { type: 'LISTENING' });
 });
 
 client.commands = new Discord.Collection();
@@ -27,7 +28,7 @@ fs.readdir('./commands/', (err, files) => {
 });
 
 client.on('message', async message => {
-	const prefix = '!!';
+	const prefix = '!';
 	if (message.author.bot || message.channel.type === 'dm') return;
 	if (message.content.startsWith(prefix)) {
 		const messageArray = message.content.split(' ');
