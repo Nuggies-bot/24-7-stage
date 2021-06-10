@@ -5,4 +5,4 @@ const Schema = new mongoose.Schema({
 	points: Number,
 });
 
-module.exports = mongoose.model('Afk', Schema);
+module.exports = mongoose.model('24-7-points', Schema);

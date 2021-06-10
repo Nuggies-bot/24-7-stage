@@ -68,7 +68,7 @@ module.exports = {
 
 		if (!users[0]) throw Error('No users found');
 
-		return users.map((x, i) => `\`${i}\` - **${x.points}** - ${client.users.cache.get(x.id).tag}`).join('\n');
+		return users.map((x, i) => `\`${i + 1}\` - **${x.points}** - ${client.users.cache.get(x.id).tag}`).join('\n');
 	},
 
 	/**
