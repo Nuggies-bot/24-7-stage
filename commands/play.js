@@ -22,7 +22,7 @@ module.exports.run = async (client, message, args) => {
 	if (!interval) {
 		interval = setInterval(async function() {
 			try {
-				stream = await ytdl(args[0], { highWaterMark: 1 << 25, quality: 'highestaudio', type: 'opus', filter: 'audioonly' });
+				stream = await ytdl(args[0], { highWaterMark: 1 << 25, quality: 'highestaudio', type: 'opus', filter: 'audio' });
 				stream.on('error', console.error);
 				broadcast.play(stream, { volume: false, highWaterMark: 1 << 25 });
 			}
