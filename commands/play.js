@@ -2,23 +2,30 @@ const { MessageEmbed } = require('discord.js');
 const ytdl = require('ytdl-core');
 const ytsr = require('ytsr');
 let interval = null;
+
 module.exports.run = async (client, message, args) => {
-	if(!message.member.roles.cache.has('851717791714115586')) return message.channel.send(new MessageEmbed().setTitle('Error').setDescription('You need the <@&851717791714115586> role to use this command.').setTimestamp().setColor('RANDOM'));
+	// if(!message.member.roles.cache.has('851717791714115586')) return message.channel.send(new MessageEmbed().setTitle('Error').setDescription('You need the <@&851717791714115586> role to use this command.').setTimestamp().setColor('RANDOM'));
+
 	const broadcast = client.voice.createBroadcast();
 	const channel = message.member.voice.channel;
-	if(!channel) return message.channel.send(new MessageEmbed().setTitle('epic bruh moment').setDescription('join a channel bruh I aint playing if no one listenin').setThumbnail('https://media1.tenor.com/images/cf7a595d6825e86da341dd1f2e8b2c18/tenor.gif?itemid=6151149').setTimestamp().setColor('RANDOM'));
-	if(channel.type !== 'stage') return message.channel.send('we only support stage channels.');
-	if(!args[0]) return message.channel.send(new MessageEmbed().setTitle('Error').setDescription('You need to tell me somethin play bruh').setTimestamp().setColor('RANDOM'));
+	if (!channel) return message.channel.send(new MessageEmbed().setTitle('epic bruh moment').setDescription('join a channel bruh I aint playing if no one listenin').setThumbnail('https://media1.tenor.com/images/cf7a595d6825e86da341dd1f2e8b2c18/tenor.gif?itemid=6151149').setTimestamp().setColor('RANDOM'));
+	if (channel.type !== 'stage') return message.channel.send('we only support stage channels.');
+	if (!args[0]) return message.channel.send(new MessageEmbed().setTitle('Error').setDescription('You need to tell me somethin play bruh').setTimestamp().setColor('RANDOM'));
 	const isValid = ytdl.validateURL(args[0]);
-	if(!isValid) return message.channel.send(new MessageEmbed().setTitle('Error').setDescription('You need to provide a proper youtube link.').setTimestamp().setColor('RANDOM'));
+	if (!isValid) return message.channel.send(new MessageEmbed().setTitle('Error').setDescription('You need to provide a proper youtube link.').setTimestamp().setColor('RANDOM'));
+
 	let stream = await ytdl(args[0]);
 	stream.on('error', console.error);
 	stream.on('end', () => {
 		message.channel.send(new MessageEmbed().setTitle('ended!').setDescription('the stream has ended.').setTimestamp().setColor('RANDOM').setThumbnail(message.author.avatarURL({ dynamic: true })));
-		message.guild.me.voice.channel.leave();
+		client.queue._skipSong();
+		if (!client.queue.queue[0]) return message.guild.me.voice.channel.leave();
+		client.queue.play();
 	});
 	broadcast.play(stream);
+
 	message.channel.send(new MessageEmbed().setTitle('Playing!').setDescription('Playing the stream, please make the bot a speaker').setTimestamp().setColor('RANDOM').setThumbnail(message.author.avatarURL({ dynamic: true })));
+	/*
 	if (!interval) {
 		interval = setInterval(async function() {
 			try {
@@ -29,18 +36,26 @@ module.exports.run = async (client, message, args) => {
 			catch (e) { return; }
 		}, 1800000);
 	}
+	*/
+
 	try {
 		const connection = await message.member.voice.channel.join();
 		message.guild.me.voice.setSuppressed(false);
 
-		connection.play(broadcast);
+		client.queue.setConnection(connection);
+
+		client.queue.addSong(stream);
+		if (!client.queue.queue[0]) {
+			client.queue.play();
+		}
 	}
 	catch (error) {
 		console.error(error);
 	}
-	setInterval(async function() {
-		if(!client.voice.connections.size) {
-			if(!channel) return;
+
+	setInterval(async () => {
+		if (!client.voice.connections.size) {
+			if (!channel) return;
 			try {
 				const connection = await channel.join();
 				connection.play(broadcast);

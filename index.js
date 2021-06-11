@@ -7,6 +7,9 @@ const mongoose = require('mongoose');
 client.login(process.env.TOKEN);
 mongoose.connect(process.env.MONGODB, { useNewUrlParser: true, useUnifiedTopology: true });
 
+const Queue = require('./structures/queue');
+client.queue = new Queue();
+
 const xp = require('./functions/lb');
 client.on('ready', () => {
 	console.log('Online!');
