@@ -10,7 +10,7 @@
     "ffmpeg-static": "^4.3.0",
     "fs": "^0.0.1-security",
     "mongoose": "^5.12.13",
-    "ytdl-core": "^4.8.2",
+    "ytdl-core": "^4.8.3",
     "ytpl": "^2.2.1",
     "ytsr": "^3.5.0"
   },
