@@ -1,16 +1,17 @@
 const { MessageEmbed } = require('discord.js');
-
+const Schema = require('../models/queue')
 module.exports.run = async (client, message, args) => {
-	client.queue._skipSong();
-	if(client.queue.queue[0]) client.queue.play(client.queue.queue[0]);
+	const data = await Schema.findOne({ guildID: message.guild.id })
+	client.queue._skipSong(message);
+	if(data.songs[0]) client.queue.play(message);
 };
 
 
 module.exports.config = {
-	name: 'restart',
-	description: 'restarts bot cuz fail lolololol',
-	usage: '!!restart',
+	name: 'skip',
+	description: 'skip a song!',
+	usage: '!!skip',
 	botPerms: [],
-	userPerms: ['ADMINISTRATOR'],
-	aliases: ['failure', 'bruh'],
+	userPerms: [],
+	aliases: ['s', 'next'],
 };
