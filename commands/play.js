@@ -16,7 +16,10 @@ module.exports.run = async (client, message, args) => {
 	if (!args[0]) return message.channel.send(new MessageEmbed().setTitle('Error').setDescription('You need to tell me somethin play bruh').setTimestamp().setColor('RANDOM'));
 	let link = args[0]
 	const isPlaylist = await validatePlaylist(link)
-
+	const data = await Schema.findOne({ guildID: message.guild.id })
+	if(data) {
+		await data.delete()
+	}
 	if (isPlaylist === true) {
 		let regPlaylist = /[?&]list=([^#&?]+)/;
 		playlist = link.match(regPlaylist);
