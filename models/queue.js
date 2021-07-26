@@ -5,4 +5,4 @@ const Schema = new mongoose.Schema({
 	songs: Array,
 });
 
-module.exports = mongoose.model('queue', Schema);
+module.exports = mongoose.model('songQueue', Schema);
