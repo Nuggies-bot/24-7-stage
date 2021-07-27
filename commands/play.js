@@ -3,8 +3,8 @@ const {
 } = require('discord.js');
 const ytdl = require('ytdl-core');
 const ytsr = require('ytsr');
-const ytpl = require('ytpl')
-
+const ytpl = require('ytpl');
+const Schema = require('../models/queue.js');
 module.exports.run = async (client, message, args) => {
 	
 	if(!message.member.roles.cache.has('851717791714115586')) return message.channel.send(new MessageEmbed().setTitle('Error').setDescription('You need the <@&851717791714115586> role to use this command.').setTimestamp().setColor('RANDOM'));
