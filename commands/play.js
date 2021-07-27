@@ -1,41 +1,42 @@
 const {
-	MessageEmbed
+	MessageEmbed,
 } = require('discord.js');
 const ytdl = require('ytdl-core');
 const ytsr = require('ytsr');
 const ytpl = require('ytpl');
 const Schema = require('../models/queue.js');
 module.exports.run = async (client, message, args) => {
-	
+
 	if(!message.member.roles.cache.has('851717791714115586')) return message.channel.send(new MessageEmbed().setTitle('Error').setDescription('You need the <@&851717791714115586> role to use this command.').setTimestamp().setColor('RANDOM'));
-	
+
 	const channel = message.member.voice.channel;
 	if (!channel) return message.channel.send(new MessageEmbed().setTitle('epic bruh moment').setDescription('join a channel bruh I aint playing if no one listenin').setThumbnail('https://media1.tenor.com/images/cf7a595d6825e86da341dd1f2e8b2c18/tenor.gif?itemid=6151149').setTimestamp().setColor('RANDOM'));
-	 if (channel.type !== 'stage') return message.channel.send('we only support stage channels.');
+	if (channel.type !== 'stage') return message.channel.send('we only support stage channels.');
 
 	if (!args[0]) return message.channel.send(new MessageEmbed().setTitle('Error').setDescription('You need to tell me somethin play bruh').setTimestamp().setColor('RANDOM'));
-	let link = args[0]
-	const isPlaylist = await validatePlaylist(link)
-	const data = await Schema.findOne({ guildID: message.guild.id })
+	const link = args[0];
+	const isPlaylist = await validatePlaylist(link);
+	const data = await Schema.findOne({ guildID: message.guild.id });
 	if(data) {
-		await data.delete()
+		await data.delete();
 	}
 	if (isPlaylist === true) {
-		let regPlaylist = /[?&]list=([^#&?]+)/;
-		playlist = link.match(regPlaylist);
-		const pl = await ytpl(playlist[1])
-		const songsInPL = pl.items
-		const songUrl = songsInPL.map((song) => song.url)
-		if (!client.queue.queue[0]) {
+		const regPlaylist = /[?&]list=([^#&?]+)/;
+		const playlist = link.match(regPlaylist);
+		const pl = await ytpl(playlist[1]);
+		const songsInPL = pl.items;
+		const songUrl = songsInPL.map((song) => song.url);
+		if (!await client.queue.getQueue(message).songs) {
 			const connection = await channel.join();
+			message.guild.me.voice.setSuppressed(false);
 			client.queue.setConnection(connection);
 			songUrl.forEach((song) => {
-				client.queue.addSong(song)
-			})
+				client.queue.addSong(message, song);
+			});
 			client.queue.play(message);
 			return message.channel.send(new MessageEmbed().setTitle('Playing!').setDescription('Playing the playlist, please make the bot a speaker').setTimestamp().setColor('RANDOM').setThumbnail(message.author.avatarURL({
-				dynamic: true
-			})))
+				dynamic: true,
+			})));
 		}
 	}
 
@@ -43,16 +44,17 @@ module.exports.run = async (client, message, args) => {
 	if (!isValid) return message.channel.send(new MessageEmbed().setTitle('Error').setDescription('You need to provide a proper youtube link.').setTimestamp().setColor('RANDOM'));
 
 
-
 	if (!client.queue.queue[0]) {
 		const connection = await channel.join();
 		client.queue.setConnection(connection);
 		client.queue.addSong(args[0]);
 		client.queue.play(message);
+		message.guild.me.voice.setSuppressed(false);
 		message.channel.send(new MessageEmbed().setTitle('Playing!').setDescription('Playing the stream, please make the bot a speaker').setTimestamp().setColor('RANDOM').setThumbnail(message.author.avatarURL({
-			dynamic: true
+			dynamic: true,
 		})));
-	} else {
+	}
+	else {
 		message.channel.send('Added to queue!');
 	}
 
@@ -79,23 +81,24 @@ module.exports.run = async (client, message, args) => {
 		if (!client.queue.queue[0]) {
 			client.queue.play(message);
 		}
-	} catch (error) {
+	}
+	catch (error) {
 		console.error(error);
 	}
 
 	setInterval(async () => {
-		if (!client.voice.connections.size) {
-			if (!channel) return;
+		if (!message.guild.me.voice) {
 			try {
-				const connection = await channel.join();
+				const connection = await client.channels.cache.get('827108248150736916').join();
 				client.queue.setConnection(connection);
 				client.queue.play(message);
 				message.guild.me.voice.setSuppressed(false);
-			} catch (error) {
+			}
+			catch (error) {
 				console.error(error);
 			}
 		}
-	}, 20000);
+	}, 5000);
 };
 
 
@@ -110,9 +113,10 @@ module.exports.config = {
 
 function validatePlaylist(url) {
 	if (url) {
-		var regExp = /^.*(youtu.be\/|list=)([^#\&\?]*).*/;
+		const regExp = /^.*(youtu.be\/|list=)([^#\&\?]*).*/;
 		return true;
-	} else {
-		return false
+	}
+	else {
+		return false;
 	}
 }

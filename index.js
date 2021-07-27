@@ -3,16 +3,24 @@ const Discord = require('discord.js');
 const client = new Discord.Client({ intents: Discord.Intents.ALL });
 const fs = require('fs');
 const mongoose = require('mongoose');
-
+const queue = require('./models/queue');
 client.login(process.env.TOKEN);
 mongoose.connect(process.env.MONGODB, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false,
-	autoIndex: false});
+	autoIndex: false });
 const Queue = require('./structures/queue');
 client.queue = new Queue();
 
 const xp = require('./functions/lb');
-client.on('ready', () => {
+client.on('ready', async () => {
 	console.log('Online!');
+	let data = await queue.findOne({ guildID: '780334622164254720' });
+	if(!data) {
+		data = new queue({
+			guildID: '780334622164254720',
+			songs: [],
+		});
+		await data.save();
+	}
 	client.user.setActivity('to polo G', { type: 'LISTENING' });
 
 	// XP System
