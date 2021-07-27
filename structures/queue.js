@@ -21,7 +21,7 @@ class Queue {
 	async play(message) {
 		if (!this.connection) throw new Error('No connection found!');
 		const queue = await Schema.findOne({ guildID: message.guild.id })
-		const stream = ytdl(queue.songs[0]);
+		const stream = ytdl(queue.songs[0], { highWaterMark: 1 << 25, quality: 'highestaudio', type: 'opus', filter: 'audioonly' });
 		this.connection.play(stream);
 		stream.on('error', console.error);
 		stream.on('end', () => {
