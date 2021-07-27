@@ -13,7 +13,7 @@ client.queue = new Queue();
 const xp = require('./functions/lb');
 client.on('ready', () => {
 	console.log('Online!');
-	client.user.setActivity('to pop music', { type: 'LISTENING' });
+	client.user.setActivity('to polo G', { type: 'LISTENING' });
 
 	// XP System
 	setInterval(async () => {
