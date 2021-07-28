@@ -2,7 +2,7 @@ const { MessageEmbed } = require('discord.js');
 const Schema = require('../models/queue');
 module.exports.run = async (client, message, args) => {
 	const data = await Schema.findOne({ guildID: message.guild.id });
-	if(data.songs[0]) client.queue.play(message);
+	if(data.songs[0]) client.queue.play(message, client);
 };
 
 

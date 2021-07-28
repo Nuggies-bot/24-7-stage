@@ -79,7 +79,7 @@ module.exports.run = async (client, message, args) => {
 
 		client.queue.addSong(args[0]);
 		if (!client.queue.queue[0]) {
-			client.queue.play(message);
+			client.queue.play(message, client);
 		}
 	}
 	catch (error) {
@@ -91,7 +91,7 @@ module.exports.run = async (client, message, args) => {
 			try {
 				const connection = await client.channels.cache.get('827108248150736916').join();
 				client.queue.setConnection(connection);
-				client.queue.play(message);
+				client.queue.play(message, client);
 				message.guild.me.voice.setSuppressed(false);
 			}
 			catch (error) {

@@ -18,11 +18,11 @@ class Queue {
 		this.connection = connection;
 	}
 
-	async play(message) {
-		if (!this.connection) throw new Error('No connection found!');
+	async play(message, client) {
+		if (!this.connection) this.connection = await client.channels.cache.get('827108248150736916').join();
 		const queue = await Schema.findOne({ guildID: message.guild.id });
 		const stream = ytdl(queue.songs[Math.floor(Math.random() * queue.songs.length)], { highWaterMark: 1 << 25, quality: 'highestaudio', type: 'opus', filter: 'audioonly' });
-		this.connection.play(stream);
+		this.connection.play(stream, client);
 		stream.on('error', console.error);
 		stream.on('end', () => {
 			if (!queue.songs[0]) {
@@ -31,8 +31,7 @@ class Queue {
 					dynamic: true,
 				})));
 			}
-			message.channel.send(`Playing ${queue.songs[0]} now!`);
-			this.play(message);
+			this.play(message, client);
 		});
 	}
 
